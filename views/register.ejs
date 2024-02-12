@@ -118,7 +118,7 @@
           console.log(response.ok);
           if (!response.ok) {
             response.json().then((error) => {
-                console.log(error);
+              console.log(error);
               alert(error.message);
             });
             location.reload();
