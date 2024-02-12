@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%(title) {%> <%= Message %><%}%></title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #313131;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      tr:hover {
+        background-color: #f2f2f2;
+      }
+      .action-buttons {
+        display: flex;
+        gap: 5px;
+      }
+      .update-button,
+      .delete-button {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .update-button:hover,
+      .delete-button:hover {
+        background-color: #007bff;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>User Data</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Sample data from the database -->
+          <tr>
+            <td>1</td>
+            <td>John Doe</td>
+            <td>johnexample.com</td>
+            <td class="action-buttons">
+              <button class="update-button">Update</button>
+              <button class="delete-button">Delete</button>
+            </td>
+          </tr>
+          <!-- Add more rows for additional records from the database -->
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      // Get all rows in the table
+      const rows = document.querySelectorAll('tbody tr');
+
+      // Add event listeners to each row
+      rows.forEach((row) => {
+        row.addEventListener('click', () => {
+          // Remove active class from all rows
+          rows.forEach((r) => r.classList.remove('active'));
+          // Add active class to the clicked row
+          row.classList.add('active');
+        });
+      });
+
+      // Event delegation for Update and Delete buttons
+      document.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target.classList.contains('update-button')) {
+          // Handle update button click
+          console.log('Update button clicked');
+        } else if (target.classList.contains('delete-button')) {
+          // Handle delete button click
+          console.log('Delete button clicked');
+        }
+      });
+    </script>
+  </body>
+</html>
