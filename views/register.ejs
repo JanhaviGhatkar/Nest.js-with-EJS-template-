@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registration Form</title>
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.TEFGCq9meFGAI-HttxxCEQAAAA?rs=1&pid=ImgDetMain" type="image/x-icon">
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -59,6 +60,46 @@
         background-color: green !important;
         color: white !important;
       }
+      .register-link {
+        text-align: end;
+      }
+      .register-link a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      .register-link a:hover {
+        font-weight: bolder;
+      }
+      @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        10%,
+        90% {
+          transform: translateX(-5px);
+        }
+        20%,
+        80% {
+          transform: translateX(5px);
+        }
+        30%,
+        50%,
+        70% {
+          transform: translateX(-5px);
+        }
+        40%,
+        60% {
+          transform: translateX(5px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+      .redButton {
+        animation: shake 0.5s ease-in-out;
+        background-color: rgba(241, 0, 0, 0.762) !important;
+        color: white !important;
+      }
     </style>
   </head>
   <body>
@@ -96,6 +137,12 @@
           onclick="register_user()"
         />
       </div>
+      <div class="register-link">
+        <p>
+          Already have an account? 
+          <a href="http://localhost:3000/user-ui/login">Sign In</a>
+        </p>
+      </div>
     </div>
   </body>
   <script>
@@ -105,7 +152,6 @@
       let email = document.getElementById('email').value;
       const userDto = { id, name, email };
       console.log(userDto);
-
       fetch('http://localhost:3000/user/addUser', {
         method: 'post',
         headers: {
@@ -117,20 +163,24 @@
           console.log(response);
           console.log(response.ok);
           if (!response.ok) {
-            response.json().then((error) => {
-              console.log(error);
-              alert(error.message);
-            });
-            location.reload();
-            return;
+            document.getElementById('submit').classList.add('redButton');
+            setTimeout(function () {
+              response.json().then((error) => {
+                console.log(error);
+                alert(error.message);
+              });
+              location.reload();
+              return;
+            }, 200);
+          } else {
+            console.log('User registered successfully');
+            document.getElementById('submit').value = 'Successfully Registered';
+            document.getElementById('submit').classList.add('greenButton');
+            setTimeout(function () {
+              alert('Register Successfully');
+              location.replace('http://localhost:3000/user-ui/login');
+            }, 400);
           }
-          console.log('User registered successfully');
-          document.getElementById('submit').value = 'Successfully Registered';
-          document.getElementById('submit').classList.add('greenButton');
-          setTimeout(function () {
-            alert('Register Successfully');
-            location.replace('http://localhost:3000/user-ui/login');
-          }, 400);
         })
         .catch((error) => {
           console.error('Error:', error.message);

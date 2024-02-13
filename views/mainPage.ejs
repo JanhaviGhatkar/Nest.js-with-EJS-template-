@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%(title) {%> <%= Message %><%}%></title>
+    <title><% if (Message) {%> <%= Message %> <%}%></title>
+    <link
+      rel="icon"
+      href="https://th.bing.com/th/id/OIP.TEFGCq9meFGAI-HttxxCEQAAAA?rs=1&pid=ImgDetMain"
+      type="image/x-icon"
+    />
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -30,6 +35,7 @@
         text-align: left;
       }
       th {
+        font-weight: bold;
         background-color: #f2f2f2;
       }
       tr:hover {
@@ -37,10 +43,11 @@
       }
       .action-buttons {
         display: flex;
-        gap: 5px;
+        justify-content: center;
       }
       .update-button,
       .delete-button {
+        margin: 5px;
         padding: 5px 10px;
         border: none;
         border-radius: 3px;
@@ -56,7 +63,7 @@
   </head>
   <body>
     <div class="container">
-      <h2>User Data</h2>
+      <h1>User Data</h1>
       <table>
         <thead>
           <tr>
@@ -66,47 +73,77 @@
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Sample data from the database -->
-          <tr>
-            <td>1</td>
-            <td>John Doe</td>
-            <td>johnexample.com</td>
-            <td class="action-buttons">
-              <button class="update-button">Update</button>
-              <button class="delete-button">Delete</button>
-            </td>
-          </tr>
-          <!-- Add more rows for additional records from the database -->
+        <tbody id="allDataOfUser">
+          <b>Registered Users </b>
         </tbody>
       </table>
     </div>
 
     <script>
-      // Get all rows in the table
-      const rows = document.querySelectorAll('tbody tr');
+      const tbody = document.getElementById('allDataOfUser');
+      tbody.innerHTML = '';
+      fetch('http://localhost:3000/user/allUsers', {
+        method: 'get',
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data.allData[0]);
+          data.allData.forEach((element) => {
+            const tr = document.createElement('tr');
 
-      // Add event listeners to each row
-      rows.forEach((row) => {
-        row.addEventListener('click', () => {
-          // Remove active class from all rows
-          rows.forEach((r) => r.classList.remove('active'));
-          // Add active class to the clicked row
-          row.classList.add('active');
+            const tdId = document.createElement('td');
+            tdId.innerHTML = element.id;
+            tr.appendChild(tdId);
+
+            const tdName = document.createElement('td');
+            tdName.innerHTML = element.name;
+            tr.appendChild(tdName);
+
+            const tdEmail = document.createElement('td');
+            tdEmail.innerHTML = element.email;
+            tr.appendChild(tdEmail);
+
+            const action = document.createElement('td');
+            const updateBtn = document.createElement('button');
+            updateBtn.classList = 'update-button';
+            updateBtn.innerHTML = 'Update';
+            updateBtn.onclick = function () {
+              fillUser(element);
+            };
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.classList = 'delete-button';
+            deleteBtn.innerHTML = 'Delete';
+            deleteBtn.onclick = function () {
+              deleteUser(element.id);
+            };
+            action.appendChild(updateBtn);
+            action.appendChild(deleteBtn);
+            tr.appendChild(action);
+            tbody.appendChild(tr);
+          });
         });
-      });
-
-      // Event delegation for Update and Delete buttons
-      document.addEventListener('click', (event) => {
-        const target = event.target;
-        if (target.classList.contains('update-button')) {
-          // Handle update button click
-          console.log('Update button clicked');
-        } else if (target.classList.contains('delete-button')) {
-          // Handle delete button click
-          console.log('Delete button clicked');
+      
+        function fillUser(userData) {
+          location.href = `http://localhost:3000/user-ui/userUpdation?id=${userData.id}&name=${userData.name}&email=${userData.email}`;
         }
-      });
+      
+      function deleteUser(id) {
+        console.log(id);
+        fetch(`http://localhost:3000/user/deleteUser/${id}`, {
+          method: 'DELETE',
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Failed to delete user');
+            }
+            location.reload();
+          })
+          .catch((error) => {
+            console.log(error.message);
+            alert('Failed to delete user');
+          });
+      }
     </script>
   </body>
 </html>

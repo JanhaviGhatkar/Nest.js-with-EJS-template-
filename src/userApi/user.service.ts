@@ -32,7 +32,7 @@ export class UserService {
   async getAllUsers() {
     const connect = await MySQL_Connection.getConnection();
     try {
-      const [allData] = await connect.query(`select * from user`);
+      const [allData] = await connect.query(`select * from user order by id asc`);
       // console.log(allData);console.log(allData[0]);
       if (!allData[0]) {
         return new HttpException('No user found', HttpStatus.NOT_FOUND);
@@ -55,9 +55,7 @@ export class UserService {
         `SELECT * FROM user WHERE id = ${userType.id} OR email = "${userType.email}"`,
       );
 
-      if (query && query[0]) {
-        console.log("dubdv");
-        
+      if (query && query[0]) {  
         throw new ConflictException("User is already exist......!")
       }
       const [data] = await connect.query(

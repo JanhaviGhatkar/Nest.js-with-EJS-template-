@@ -14,7 +14,6 @@ export class UserController {
   allUser() {
     return this.userService.getAllUsers();
   }
-
   @Post("addUser")
   @UsePipes(new ValidationPipe())
   registerUser(@Body() userDto: userDto){
@@ -29,5 +28,6 @@ export class UserController {
   deleteUser(@Param("id",ParseIntPipe) id:number){
     return this.userService.DeleteUser(id);
   }
+
 }
 

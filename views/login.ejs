@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><% if (Message) {%> <%= Message %> <%} %></title>
+    <link rel="icon" href="https://th.bing.com/th/id/OIP.TEFGCq9meFGAI-HttxxCEQAAAA?rs=1&pid=ImgDetMain" type="image/x-icon">
+
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -65,8 +67,38 @@
       .register-link a:hover {
         font-weight: bolder;
       }
+      @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        10%,
+        90% {
+          transform: translateX(-5px);
+        }
+        20%,
+        80% {
+          transform: translateX(5px);
+        }
+        30%,
+        50%,
+        70% {
+          transform: translateX(-5px);
+        }
+        40%,
+        60% {
+          transform: translateX(5px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
       .redButton {
+        animation: shake 0.5s ease-in-out;
         background-color: rgba(241, 0, 0, 0.762) !important;
+        color: white !important;
+      }
+      .greenButton {
+        background-color: green !important;
         color: white !important;
       }
     </style>
@@ -91,7 +123,7 @@
       <div class="register-link">
         <p>
           Don't have an account?
-          <a href="http://localhost:3000/user-ui/registerUser">Register Now</a>
+          <a href="http://localhost:3000/user-ui/registerUser">Create new one</a>
         </p>
       </div>
     </div>
@@ -115,11 +147,18 @@
               alert('User not found. Register the user');
               location.reload();
               return;
-            }, 200);  
-          } 
-          else{alert('Login successfully');
-            location.replace('');
-        }
+            }, 200);
+          } else {
+            console.log('User registered successfully');
+            document.getElementById('submit').value = 'Successfully Loged In';
+            document.getElementById('submit').classList.add('greenButton');
+            setTimeout(function () {
+              alert('LogIn Successfully');
+              location.replace('http://localhost:3000/user-ui/allrecords');
+            }, 400);
+            // alert('Login successfully');
+            // location.replace('http://localhost:3000/user-ui/allrecords');
+          }
         })
         .catch((error) => {
           console.log(error);
