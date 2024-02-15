@@ -1,7 +1,9 @@
 function mainPage() {
     let email = document.getElementById('email');
+    let  password = document.getElementById('password');
     console.log(email.value);
-    const data = { email: email.value };
+    console.log(password.value);
+    const data = { email: email.value , password:password.value};
     fetch('http://localhost:3000/user/loginUser', {
       method: 'post',
       headers: {
@@ -36,7 +38,7 @@ function mainPage() {
         // const data = response.json();
         console.log(data);
         localStorage.setItem('userData', JSON.stringify(data.data[0].name));
-        console.log('User registered successfully');
+        console.log('User loggein successfully');
         document.getElementById('submit').value = 'Successfully Loged In';
         document.getElementById('submit').classList.add('greenButton');
         Swal.fire({

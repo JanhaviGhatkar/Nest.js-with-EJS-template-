@@ -7,21 +7,22 @@ import {
 } from '@nestjs/common';
 import { query } from 'express';
 import { MySQL_Connection } from 'src/database/dbConnection';
-import { userType } from 'utils/types';
+import { logUser, userType } from 'utils/types';
 
 @Injectable()
 export class UserService {
   //Login form email is valid or not
-  async checkuser(email: string) {
+  async checkuser(user: logUser): Promise<userType> {
     const connect = await MySQL_Connection.getConnection();
     try {
       const [data] = await connect.query(
-        `select * from user where email = "${email}"`,
+        `select * from user where email = "${user.email}" and  password = "${user.password}"`,
       );
       if (!data[0]) {
         throw new NotFoundException('User not found');
       }
-      return { Status: 200, Message: 'Data Found', data };
+      return data[0];
+      // return { Status: 200, Message: 'Data Found', data };
     } catch (error) {
       throw new Error('Failed to create employee: ' + error.message);
     } finally {
@@ -90,7 +91,7 @@ export class UserService {
       const query = ` update user set email=? where id = ?`;
       const data = [email, id];
       const [userData] = await connect.query(query, data);
-      console.log(userData);
+      // console.log(userData);
 
       if (userData[0]) {
         return {
@@ -101,7 +102,7 @@ export class UserService {
       const [updatedUser] = await connect.query(
         `select * from user where id =${id}`,
       );
-      console.log(updatedUser);
+      // console.log(updatedUser);
 
       return { Status: 200, Message: 'User updated.!!!!', Data: updatedUser };
     } catch (error) {

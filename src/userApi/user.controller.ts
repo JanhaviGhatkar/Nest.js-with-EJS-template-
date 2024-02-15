@@ -14,13 +14,14 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { userDto } from 'src/DTO/userDto';
+import { logUser } from 'utils/types';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post('loginUser')
-  userLog(@Body('email') email: string) {
-    return this.userService.checkuser(email);
+  userLog(@Body() user: logUser) {
+    return this.userService.checkuser(user);
   }
 
   @Get('allUsers')
@@ -51,10 +52,10 @@ export class UserController {
     let userDto: userDto;
     if (!isNaN(Number(idOrNameOrEmail))) {
       // If the parameter is a number, assume it's an id
-      userDto = { id: Number(idOrNameOrEmail), name: '', email: '' };
+      userDto = { id: Number(idOrNameOrEmail), name: '', email: '',password:'' };
     } else {
       // If the parameter is not a number, assume it's a name or email
-      userDto = { id: 0, name: idOrNameOrEmail, email: idOrNameOrEmail };
+      userDto = { id: 0, name: idOrNameOrEmail, email: idOrNameOrEmail,password:'' };
     }
     return this.userService.getUserByCriteria(userDto);
   }

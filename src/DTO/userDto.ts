@@ -14,4 +14,6 @@ export class userDto{
     // @IsNotEmpty()
     // @Length(2,45)
     email:string;
+
+    password:string;
 }

@@ -8,6 +8,14 @@ body {
   align-items: center;
   height: 100vh;
 }
+.form-group label {
+  display: block; /* Make labels display block */
+  margin-bottom: 5px; /* Add margin between label and input */
+}
+
+.form-group input[type='password'] {
+  margin-top: 5px; /* Add margin between input and next label */
+}
 .login-container {
   width: 300px;
   background-color: #fff;
