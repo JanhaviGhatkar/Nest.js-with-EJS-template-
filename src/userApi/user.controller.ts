@@ -29,5 +29,17 @@ export class UserController {
     return this.userService.DeleteUser(id);
   }
 
+  @Get('getUserByParameter/:idOrNameOrEmail')
+  getUserByParameter(@Param('idOrNameOrEmail') idOrNameOrEmail: string) {
+    let userDto: userDto;
+    if (!isNaN(Number(idOrNameOrEmail))) {
+      // If the parameter is a number, assume it's an id
+      userDto = { id: Number(idOrNameOrEmail), name: '', email: '' };
+    } else {
+      // If the parameter is not a number, assume it's a name or email
+      userDto = { id: 0, name: idOrNameOrEmail, email: idOrNameOrEmail };
+    }
+    return this.userService.getUserByCriteria(userDto);
+  }
 }
 

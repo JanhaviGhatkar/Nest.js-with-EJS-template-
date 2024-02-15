@@ -4,7 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><% if (Message) {%> <%= Message %> <%} %></title>
-    <link rel="icon" href="https://th.bing.com/th/id/OIP.TEFGCq9meFGAI-HttxxCEQAAAA?rs=1&pid=ImgDetMain" type="image/x-icon">
+    <link
+      rel="icon"
+      href="https://th.bing.com/th/id/OIP.TEFGCq9meFGAI-HttxxCEQAAAA?rs=1&pid=ImgDetMain"
+      type="image/x-icon"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
       body {
@@ -123,7 +128,9 @@
       <div class="register-link">
         <p>
           Don't have an account?
-          <a href="http://localhost:3000/user-ui/registerUser">Create new one</a>
+          <a href="http://localhost:3000/user-ui/registerUser"
+            >Create new one</a
+          >
         </p>
       </div>
     </div>
@@ -142,22 +149,32 @@
       })
         .then((response) => {
           if (!response.ok) {
-            document.getElementById('submit').classList.add('redButton');
-            setTimeout(function () {
-              alert('User not found. Register the user');
-              location.reload();
-              return;
-            }, 200);
+            // document.getElementById('submit').classList.add('redButton')
+            Swal.fire({
+              icon: 'error',
+              heightAuto: false,
+              width: '30%',
+              title: 'Oops...',
+              text: 'User not found...!. Register the user',
+              allowOutsideClick: false,
+              showConfirmButton: false, // Hide the "OK" button
+              timer: 1000, // Show the popup for 2 seconds
+            }).then(() => location.reload());
           } else {
             console.log('User registered successfully');
             document.getElementById('submit').value = 'Successfully Loged In';
             document.getElementById('submit').classList.add('greenButton');
-            setTimeout(function () {
-              alert('LogIn Successfully');
-              location.replace('http://localhost:3000/user-ui/allrecords');
-            }, 400);
-            // alert('Login successfully');
-            // location.replace('http://localhost:3000/user-ui/allrecords');
+            Swal.fire({
+              title: 'LogIn Successfully!',
+              heightAuto: false,
+              width: '30%',
+              icon: 'success',
+              allowOutsideClick: false,
+              showConfirmButton: false, // Hide the "OK" button
+              timer: 1000, // Show the popup for 2 seconds
+            }).then(() =>
+              location.replace('http://localhost:3000/user-ui/allrecords'),
+            );
           }
         })
         .catch((error) => {

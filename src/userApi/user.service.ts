@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { query } from 'express';
 import { MySQL_Connection } from 'src/database/dbConnection';
 import { userType } from 'utils/types';
 
@@ -32,7 +33,9 @@ export class UserService {
   async getAllUsers() {
     const connect = await MySQL_Connection.getConnection();
     try {
-      const [allData] = await connect.query(`select * from user order by id asc`);
+      const [allData] = await connect.query(
+        `select * from user order by id asc`,
+      );
       // console.log(allData);console.log(allData[0]);
       if (!allData[0]) {
         return new HttpException('No user found', HttpStatus.NOT_FOUND);
@@ -55,8 +58,8 @@ export class UserService {
         `SELECT * FROM user WHERE id = ${userType.id} OR email = "${userType.email}"`,
       );
 
-      if (query && query[0]) {  
-        throw new ConflictException("User is already exist......!")
+      if (query && query[0]) {
+        throw new ConflictException('User is already exist......!');
       }
       const [data] = await connect.query(
         `insert into user (id,name,email) values (${userType.id},"${userType.name}","${userType.email}")`,
@@ -68,9 +71,7 @@ export class UserService {
         };
       }
       return { status: HttpStatus.OK, message: 'User created' };
-    } 
-    
-    finally {
+    } finally {
       connect.release();
     }
   }
@@ -130,6 +131,36 @@ export class UserService {
       return { Status: 200, Message: 'User deleted' };
     } catch (error) {
       throw new Error('Failed to create employee: ' + error.message);
+    } finally {
+      connect.release();
+    }
+  }
+
+  async getUserByCriteria(userType: userType) {
+    console.log(userType);
+    const connect = await MySQL_Connection.getConnection();
+    try {
+      
+      let queryes :string;
+      if(!isNaN(userType.id) && userType.id > 0){
+        queryes =`select * from user where id = ${userType.id}`;
+        console.log(queryes);
+      }
+      else {
+        queryes = `select * from user where name = "${userType.name}" or email ="${userType.email}"`
+        console.log(queryes);
+      }
+      
+      
+      const [data] = await connect.query(queryes);
+      console.log(data);
+      // console.log(queryes);
+      if(!data[0] ){
+        throw new ConflictException('User not found......!');
+      }
+      return {Status:200, Message:'User Found', Data: data}
+    } catch (error) {
+      throw new Error('Failed to fetch the employee: ' + error.message);
     } finally {
       connect.release();
     }

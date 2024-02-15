@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registration Form</title>
     <link rel="icon" href="https://th.bing.com/th/id/OIP.TEFGCq9meFGAI-HttxxCEQAAAA?rs=1&pid=ImgDetMain" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -176,10 +178,20 @@
             console.log('User registered successfully');
             document.getElementById('submit').value = 'Successfully Registered';
             document.getElementById('submit').classList.add('greenButton');
-            setTimeout(function () {
-              alert('Register Successfully');
-              location.replace('http://localhost:3000/user-ui/login');
-            }, 400);
+              Swal.fire({
+              title: 'User registerd Successfully!',
+              heightAuto: false,
+              width: '30%',
+              icon: 'success',
+              allowOutsideClick: false,
+              showConfirmButton: false, // Hide the "OK" button
+              timer: 1500, // Show the popup for 2 seconds
+            })
+            .then(()=>location.replace('http://localhost:3000/user-ui/login'))
+            // setTimeout(function () {
+            //   alert('Register Successfully');
+              
+            // }, 400);
           }
         })
         .catch((error) => {
