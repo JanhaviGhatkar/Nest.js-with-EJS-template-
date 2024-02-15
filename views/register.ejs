@@ -4,105 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registration Form</title>
-    <link rel="icon" href="https://th.bing.com/th/id/OIP.TEFGCq9meFGAI-HttxxCEQAAAA?rs=1&pid=ImgDetMain" type="image/x-icon">
+    <link
+      rel="icon"
+      href="https://th.bing.com/th/id/OIP.TEFGCq9meFGAI-HttxxCEQAAAA?rs=1&pid=ImgDetMain"
+      type="image/x-icon"
+    />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #313131;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-      .registration-container {
-        width: 300px;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      }
-      .registration-container h2 {
-        margin-top: 0;
-        margin-bottom: 20px;
-        text-align: center;
-      }
-      .form-group {
-        margin-bottom: 15px;
-      }
-      .form-group label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 5px;
-      }
-      .form-group input[type='text'],
-      .form-group input[type='email'] {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        box-sizing: border-box;
-      }
-      .form-group input[type='submit'] {
-        width: 100%;
-        padding: 10px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-      }
-      .form-group input[type='submit']:hover {
-        background-color: #0056b3;
-      }
-      .greenButton {
-        background-color: green !important;
-        color: white !important;
-      }
-      .register-link {
-        text-align: end;
-      }
-      .register-link a {
-        color: #007bff;
-        text-decoration: none;
-      }
-      .register-link a:hover {
-        font-weight: bolder;
-      }
-      @keyframes shake {
-        0% {
-          transform: translateX(0);
-        }
-        10%,
-        90% {
-          transform: translateX(-5px);
-        }
-        20%,
-        80% {
-          transform: translateX(5px);
-        }
-        30%,
-        50%,
-        70% {
-          transform: translateX(-5px);
-        }
-        40%,
-        60% {
-          transform: translateX(5px);
-        }
-        100% {
-          transform: translateX(0);
-        }
-      }
-      .redButton {
-        animation: shake 0.5s ease-in-out;
-        background-color: rgba(241, 0, 0, 0.762) !important;
-        color: white !important;
-      }
-    </style>
+    <link rel="stylesheet" href="../../css/register.css" />
   </head>
   <body>
     <div class="registration-container">
@@ -141,63 +49,11 @@
       </div>
       <div class="register-link">
         <p>
-          Already have an account? 
+          Already have an account?
           <a href="http://localhost:3000/user-ui/login">Sign In</a>
         </p>
       </div>
     </div>
+    <script src="../../js/register.js"></script>
   </body>
-  <script>
-    function register_user() {
-      let id = parseInt(document.getElementById('id').value);
-      let name = document.getElementById('name').value;
-      let email = document.getElementById('email').value;
-      const userDto = { id, name, email };
-      console.log(userDto);
-      fetch('http://localhost:3000/user/addUser', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userDto),
-      })
-        .then((response) => {
-          console.log(response);
-          console.log(response.ok);
-          if (!response.ok) {
-            document.getElementById('submit').classList.add('redButton');
-            setTimeout(function () {
-              response.json().then((error) => {
-                console.log(error);
-                alert(error.message);
-              });
-              location.reload();
-              return;
-            }, 200);
-          } else {
-            console.log('User registered successfully');
-            document.getElementById('submit').value = 'Successfully Registered';
-            document.getElementById('submit').classList.add('greenButton');
-              Swal.fire({
-              title: 'User registerd Successfully!',
-              heightAuto: false,
-              width: '30%',
-              icon: 'success',
-              allowOutsideClick: false,
-              showConfirmButton: false, // Hide the "OK" button
-              timer: 1500, // Show the popup for 2 seconds
-            })
-            .then(()=>location.replace('http://localhost:3000/user-ui/login'))
-            // setTimeout(function () {
-            //   alert('Register Successfully');
-              
-            // }, 400);
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error.message);
-          alert('Something went wrong while registering the user');
-        });
-    }
-  </script>
 </html>

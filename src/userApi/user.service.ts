@@ -30,11 +30,12 @@ export class UserService {
   }
 
   //To show all data on main page
-  async getAllUsers() {
+  async getAllUsers(page = 1, pageSize = 10) {
     const connect = await MySQL_Connection.getConnection();
     try {
+      const offset = (page - 1) * pageSize;
       const [allData] = await connect.query(
-        `select * from user order by id asc`,
+        `select * from user order by id asc limit ${pageSize} offset ${offset}`,
       );
       // console.log(allData);console.log(allData[0]);
       if (!allData[0]) {
@@ -140,25 +141,21 @@ export class UserService {
     console.log(userType);
     const connect = await MySQL_Connection.getConnection();
     try {
-      
-      let queryes :string;
-      if(!isNaN(userType.id) && userType.id > 0){
-        queryes =`select * from user where id = ${userType.id}`;
+      let queryes: string;
+      if (!isNaN(userType.id) && userType.id > 0) {
+        queryes = `select * from user where id = ${userType.id}`;
+        console.log(queryes);
+      } else {
+        queryes = `select * from user where name = "${userType.name}" or email ="${userType.email}"`;
         console.log(queryes);
       }
-      else {
-        queryes = `select * from user where name = "${userType.name}" or email ="${userType.email}"`
-        console.log(queryes);
-      }
-      
-      
       const [data] = await connect.query(queryes);
       console.log(data);
       // console.log(queryes);
-      if(!data[0] ){
+      if (!data[0]) {
         throw new ConflictException('User not found......!');
       }
-      return {Status:200, Message:'User Found', Data: data}
+      return { Status: 200, Message: 'User Found', Data: data };
     } catch (error) {
       throw new Error('Failed to fetch the employee: ' + error.message);
     } finally {
