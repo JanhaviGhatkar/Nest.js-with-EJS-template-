@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { query } from 'express';
 import { MySQL_Connection } from 'src/database/dbConnection';
+import { encodedePassword } from 'utils/constatnts';
 import { logUser, userType } from 'utils/types';
 
 @Injectable()
@@ -55,16 +56,19 @@ export class UserService {
     const connect = await MySQL_Connection.getConnection();
     try {
       console.log(userType);
-
+      // const password = encodedePassword(userType.password)
+      // console.log(password);
+      console.log(`SELECT * FROM user WHERE id = ${userType.id} OR email = "${userType.email}"`);
+      
       const [query] = await connect.query(
         `SELECT * FROM user WHERE id = ${userType.id} OR email = "${userType.email}"`,
       );
-
+      console.log(query);
       if (query && query[0]) {
         throw new ConflictException('User is already exist......!');
       }
       const [data] = await connect.query(
-        `insert into user (id,name,email) values (${userType.id},"${userType.name}","${userType.email}")`,
+        `insert into user (id,name,email,password) values (${userType.id},"${userType.name}","${userType.email}", "${userType.password}")`,
       );
       if (data[0]) {
         return {

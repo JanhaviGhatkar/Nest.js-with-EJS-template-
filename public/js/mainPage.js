@@ -16,6 +16,7 @@ function prevPage() {
     fetchAllData();
   }
 }
+
 function updateButton() {
   const prevPageButton = document.getElementById('prevPageButton');
   const nextPageButton = document.getElementById('nextPageButton');
