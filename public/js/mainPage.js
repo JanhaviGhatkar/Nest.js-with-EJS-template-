@@ -30,7 +30,8 @@ const userName = JSON.parse(localStorage.getItem('userData'));
 if (!userName) {
   ocument.getElementById('greeting').textContent = 'Welcome!';
 }
-document.getElementById('greeting').textContent = `Welcome, ${userName.data.name}!`;
+document.getElementById('greeting').textContent =
+  `Welcome, ${userName.data.name}!`;
 function tableCreate(data) {
   const tbody = document.getElementById('allDataOfUser');
   tbody.innerHTML = '';
@@ -138,7 +139,13 @@ function logOut() {
       Swal.fire({
         title: 'You have been successfully \nsigned out.',
         icon: 'success',
-      }).then(() => location.replace(`http://localhost:3000/user-ui/login`));
+        showConfirmButton: false,
+        timer: 1000,
+      })
+        .then(() => {
+          localStorage.removeItem('userData');
+        })
+        .then(() => location.replace(`http://localhost:3000/user-ui/login`));
     }
   });
 }
