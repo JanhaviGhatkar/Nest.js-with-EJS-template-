@@ -30,7 +30,7 @@ const userName = JSON.parse(localStorage.getItem('userData'));
 if (!userName) {
   ocument.getElementById('greeting').textContent = 'Welcome!';
 }
-document.getElementById('greeting').textContent = `Welcome, ${userName}!`;
+document.getElementById('greeting').textContent = `Welcome, ${userName.data.name}!`;
 function tableCreate(data) {
   const tbody = document.getElementById('allDataOfUser');
   tbody.innerHTML = '';

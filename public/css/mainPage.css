@@ -98,6 +98,19 @@ tr:hover {
   background-color: #007bff;
   color: #fff;
 }
+#prevPageButton:disabled,
+#nextPageButton:disabled {
+  border: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: unset;
+}
+#prevPageButton:disabled:hover,
+#nextPageButton:disabled:hover {
+  background-color: initial;
+  color: initial;
+}
+
 #prevPageButton,
 #nextPageButton {
   margin: 5px;
