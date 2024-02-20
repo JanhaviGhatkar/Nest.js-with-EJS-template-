@@ -1,0 +1,1 @@
+project on user managment we ave only one table with name user and crud operation login logout jwt token
