@@ -1,31 +1,13 @@
 let currentPage = 1;
 const pageSize = 10;
-function nextPage() {
-  currentPage++;
-  document.getElementById('currentPage').innerText = `Page ${currentPage}`;
-  updateButton();
-  fetchAllData();
-}
+// function nextPage() {
+//   currentPage++;
+//   document.getElementById('currentPage').innerText = `Page ${currentPage}`;
+//   updateButton();
+//   fetchAllData();
+// }
 
 // Function to handle previous page button click
-function prevPage() {
-  if (currentPage > 1) {
-    currentPage--;
-    document.getElementById('currentPage').innerText = `Page ${currentPage}`;
-    updateButton();
-    fetchAllData();
-  }
-}
-
-function updateButton() {
-  const prevPageButton = document.getElementById('prevPageButton');
-  const nextPageButton = document.getElementById('nextPageButton');
-  if (currentPage === 1) {
-    prevPageButton.disabled = true;
-  } else {
-    prevPageButton.disabled = false;
-  }
-}
 
 const userName = JSON.parse(localStorage.getItem('userData'));
 if (!userName) {
@@ -67,6 +49,30 @@ function tableCreate(data) {
   });
 }
 
+// function fetchAllData() {
+//   const tbody = document.getElementById('allDataOfUser');
+//   tbody.innerHTML = '';
+//   fetch(
+//     `http://localhost:3000/user/allUsers?page=${currentPage}&pageSize=${pageSize}`,
+//     {
+//       method: 'get',
+//     },
+//   )
+//     .then((response) => response.json())
+//     .then((data) => {
+//       if (!data.allData) {
+//         document.getElementById('nextPageButton').disabled = true;
+//         Swal.fire('No data received from the server');
+//         return;
+//       } else {
+//         document.getElementById('nextPageButton').disabled = false; // Enable next page button
+//       }
+//       tableCreate(data.allData);
+//     });
+// }
+
+let maxPage = 1; // Maximum page count
+
 function fetchAllData() {
   const tbody = document.getElementById('allDataOfUser');
   tbody.innerHTML = '';
@@ -79,16 +85,47 @@ function fetchAllData() {
     .then((response) => response.json())
     .then((data) => {
       if (!data.allData) {
-        // Handle case where data.allData is undefined
+        // Handle case where data.allData is undefined or empty
         document.getElementById('nextPageButton').disabled = true;
         Swal.fire('No data received from the server');
         return;
       } else {
+        maxPage = Math.ceil(data.totalRecords / pageSize); // Update maxPage based on total records
         document.getElementById('nextPageButton').disabled = false; // Enable next page button
       }
       tableCreate(data.allData);
     });
 }
+
+function nextPage() {
+  if (currentPage < maxPage) {
+    currentPage++;
+    document.getElementById('currentPage').innerText = `Page ${currentPage}`;
+    fetchAllData();
+  } else {
+    // Disable next button if currentPage exceeds maxPage
+    document.getElementById('nextPageButton').disabled = true;
+  }
+}
+
+function prevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    document.getElementById('currentPage').innerText = `Page ${currentPage}`;
+    updateButton();
+    fetchAllData();
+  }
+}
+
+function updateButton() {
+  const prevPageButton = document.getElementById('prevPageButton');
+  if (currentPage < 2) {
+    prevPageButton.disabled = true;
+  } else {
+    prevPageButton.disabled = false;
+  }
+}
+
 function fillUser(userData) {
   location.href = `http://localhost:3000/user-ui/userUpdation?id=${userData.id}&name=${userData.name}&email=${userData.email}`;
 }

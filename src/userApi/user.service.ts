@@ -1,24 +1,32 @@
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
   ConflictException,
   HttpException,
   HttpStatus,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { query } from 'express';
+import { Cache } from 'cache-manager';
 import { MySQL_Connection } from 'src/database/dbConnection';
-import { encodedePassword } from 'utils/constatnts';
 import { logUser, userType } from 'utils/types';
 
 @Injectable()
 export class UserService {
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+
   //Login form email is valid or not
   async checkuser(user: logUser): Promise<userType> {
+    console.log(user);
     const connect = await MySQL_Connection.getConnection();
     try {
       const [data] = await connect.query(
         `select * from user where email = "${user.email}" and  password = "${user.password}"`,
       );
+      console.log(user.password);
+
+      console.log(data);
+
       if (!data[0]) {
         throw new NotFoundException('User not found');
       }
@@ -56,10 +64,10 @@ export class UserService {
     const connect = await MySQL_Connection.getConnection();
     try {
       console.log(userType);
-      // const password = encodedePassword(userType.password)
-      // console.log(password);
-      console.log(`SELECT * FROM user WHERE id = ${userType.id} OR email = "${userType.email}"`);
-      
+      console.log(
+        `SELECT * FROM user WHERE id = ${userType.id} OR email = "${userType.email}"`,
+      );
+
       const [query] = await connect.query(
         `SELECT * FROM user WHERE id = ${userType.id} OR email = "${userType.email}"`,
       );
@@ -76,6 +84,7 @@ export class UserService {
           message: 'Something went wrong while creating user',
         };
       }
+      this.cacheManager.del('all_user')
       return { status: HttpStatus.OK, message: 'User created' };
     } finally {
       connect.release();
@@ -134,6 +143,7 @@ export class UserService {
           HttpStatus.BAD_REQUEST,
         );
       }
+     
       return { Status: 200, Message: 'User deleted' };
     } catch (error) {
       throw new Error('Failed to create employee: ' + error.message);
