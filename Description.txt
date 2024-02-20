@@ -1,1 +1,2 @@
-project on user managment we ave only one table with name user and crud operation login logout jwt token
+Description:
+The User Management System is a web application designed to manage user data and provide basic authentication functionalities. The system utilizes a single database table named "user" to store user information. The primary features of the system include user registration, login, logout, and the generation of JWT (JSON Web Tokens) for authentication.
